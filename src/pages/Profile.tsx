@@ -14,6 +14,11 @@ const MENU = [
 export default function Profile() {
   const { user, logout } = useAuth();
   const [summary, setSummary] = useState<any>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    api.me().then((u) => setAvatarUrl(u.avatarUrl ?? null));
+  }, []);
 
   useEffect(() => {
     api.myEvaluations().then((d) => setSummary(d.summary));
@@ -25,8 +30,8 @@ export default function Profile() {
 
       <div className="card mb-4">
         <div className="mb-4 flex items-center gap-3">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-100 text-lg font-bold text-brand-600">
-            {user?.name?.[0] ?? "?"}
+          <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-brand-100 text-lg font-bold text-brand-600">
+            {avatarUrl ? <img src={avatarUrl} alt="" className="h-full w-full object-cover" /> : (user?.name?.[0] ?? "?")}
           </div>
           <div>
             <p className="font-semibold text-slate-800">{user?.name}</p>

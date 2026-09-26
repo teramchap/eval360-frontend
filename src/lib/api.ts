@@ -67,7 +67,16 @@ export const api = {
   funAnswer: (questionId: string, selectedUserId: string) =>
     rpc<void>("save_fun_answer", { p_question_id: questionId, p_selected_user_id: selectedUserId }),
 
-  updateProfile: (email: string, phone: string) => rpc<any>("update_my_profile", { p_email: email, p_phone: phone }),
+  updateProfile: (email: string, phone: string, avatarUrl?: string) =>
+    rpc<any>("update_my_profile", { p_email: email, p_phone: phone, p_avatar_url: avatarUrl ?? null }),
+  uploadAvatar: async (userId: string, file: File) => {
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `${userId}/avatar.${ext}`;
+    const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
+    if (error) throw new Error(error.message);
+    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+    return data.publicUrl + `?t=${Date.now()}`;
+  },
   changePassword: async (_currentPassword: string, newPassword: string) => {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) throw new Error(error.message);
@@ -75,6 +84,13 @@ export const api = {
   },
 
   adminUsers: () => rpc<any[]>("admin_list_users"),
+  adminUsersFull: () => rpc<any[]>("admin_list_users_full"),
+  adminCreateUser: (code: string, name: string, role: string, unit: string, reportsTo: string | null, password: string) =>
+    rpc<any>("admin_create_user", { p_code: code, p_name: name, p_role: role, p_unit: unit, p_reports_to: reportsTo, p_password: password }),
+  adminUpdateUser: (userId: string, name: string, role: string, unit: string, reportsTo: string | null, active: boolean) =>
+    rpc<any>("admin_update_user", { p_user_id: userId, p_name: name, p_role: role, p_unit: unit, p_reports_to: reportsTo, p_active: active }),
+  adminResetPassword: (userId: string, newPassword: string) =>
+    rpc<any>("admin_reset_password", { p_user_id: userId, p_new_password: newPassword }),
   adminCycles: () => rpc<any[]>("admin_list_cycles"),
   adminCreateCycle: (title: string, startDate: string, endDate: string) =>
     rpc<any>("admin_create_cycle", { p_title: title, p_start: startDate, p_end: endDate }),

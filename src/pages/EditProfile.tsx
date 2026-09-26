@@ -1,21 +1,43 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
+import { useAuth } from "../context/AuthContext";
 
 export default function EditProfile() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [ok, setOk] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   useEffect(() => {
     api.me().then((u) => {
       setEmail(u.email ?? "");
       setPhone(u.phone ?? "");
+      setAvatarUrl(u.avatarUrl ?? null);
     });
   }, []);
+
+  async function onPickPhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setError("");
+    setUploadingPhoto(true);
+    try {
+      const url = await api.uploadAvatar(user.id, file);
+      await api.updateProfile(email, phone, url);
+      setAvatarUrl(url);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setUploadingPhoto(false);
+    }
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -38,6 +60,28 @@ export default function EditProfile() {
         › بازگشت
       </button>
       <h1 className="mb-5 text-lg font-bold text-slate-800">اطلاعات حساب کاربری</h1>
+
+      <div className="card mb-4 flex flex-col items-center">
+        <div className="relative mb-3">
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="" className="h-20 w-20 rounded-full object-cover" />
+          ) : (
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-100 text-2xl font-bold text-brand-600">
+              {user?.name?.[0] ?? "?"}
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="absolute -bottom-1 -left-1 flex h-7 w-7 items-center justify-center rounded-full bg-brand-500 text-xs text-white shadow"
+            disabled={uploadingPhoto}
+          >
+            📷
+          </button>
+          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={onPickPhoto} />
+        </div>
+        <p className="text-xs text-slate-400">{uploadingPhoto ? "در حال آپلود..." : "برای تغییر عکس، روی آیکون دوربین بزنید"}</p>
+      </div>
 
       <form onSubmit={onSubmit} className="card space-y-4">
         <div>
@@ -63,6 +107,10 @@ export default function EditProfile() {
           {busy ? "در حال ذخیره..." : "ذخیره تغییرات"}
         </button>
       </form>
+
+      <p className="mt-4 text-center text-xs text-slate-400">
+        برای تغییر نام، نقش یا واحد، به مدیر واحد اطلاع دهید.
+      </p>
     </div>
   );
 }
