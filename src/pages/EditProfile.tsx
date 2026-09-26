@@ -56,10 +56,10 @@ export default function EditProfile() {
 
   return (
     <div className="app-shell">
-      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-slate-500">
+      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-white/70 hover:text-white">
         › بازگشت
       </button>
-      <h1 className="mb-5 text-lg font-bold text-slate-800">اطلاعات حساب کاربری</h1>
+      <h1 className="mb-5 text-lg font-bold text-white drop-shadow-sm">اطلاعات حساب کاربری</h1>
 
       <div className="card mb-4 flex flex-col items-center">
         <div className="relative mb-3">
@@ -108,7 +108,7 @@ export default function EditProfile() {
         </button>
       </form>
 
-      <p className="mt-4 text-center text-xs text-slate-400">
+      <p className="mt-4 text-center text-xs text-white/70">
         برای تغییر نام، نقش یا واحد، به مدیر واحد اطلاع دهید.
       </p>
     </div>

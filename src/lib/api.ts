@@ -87,10 +87,13 @@ export const api = {
   adminUsersFull: () => rpc<any[]>("admin_list_users_full"),
   adminCreateUser: (code: string, name: string, role: string, unit: string, reportsTo: string | null, password: string) =>
     rpc<any>("admin_create_user", { p_code: code, p_name: name, p_role: role, p_unit: unit, p_reports_to: reportsTo, p_password: password }),
-  adminUpdateUser: (userId: string, name: string, role: string, unit: string, reportsTo: string | null, active: boolean) =>
-    rpc<any>("admin_update_user", { p_user_id: userId, p_name: name, p_role: role, p_unit: unit, p_reports_to: reportsTo, p_active: active }),
+  adminUpdateUser: (userId: string, code: string, name: string, role: string, unit: string, reportsTo: string | null, active: boolean) =>
+    rpc<any>("admin_update_user", { p_user_id: userId, p_code: code, p_name: name, p_role: role, p_unit: unit, p_reports_to: reportsTo, p_active: active }),
   adminResetPassword: (userId: string, newPassword: string) =>
     rpc<any>("admin_reset_password", { p_user_id: userId, p_new_password: newPassword }),
+  adminDeleteUser: (userId: string) => rpc<any>("admin_delete_user", { p_user_id: userId }),
+  adminSetAvatar: (userId: string, avatarUrl: string) =>
+    rpc<any>("admin_set_avatar", { p_user_id: userId, p_avatar_url: avatarUrl }),
   adminCycles: () => rpc<any[]>("admin_list_cycles"),
   adminCreateCycle: (title: string, startDate: string, endDate: string) =>
     rpc<any>("admin_create_cycle", { p_title: title, p_start: startDate, p_end: endDate }),

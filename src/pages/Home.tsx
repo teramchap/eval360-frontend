@@ -21,8 +21,8 @@ export default function Home() {
     <div className="app-shell">
       <header className="mb-6 flex items-start justify-between">
         <div>
-          <h1 className="text-lg font-bold text-slate-800">سلام، {user?.name?.split(" ")[0] ?? ""} 👋</h1>
-          <p className="mt-1 text-sm text-slate-500">به سامانه ارزیابی ۳۶۰ درجه خوش آمدید</p>
+          <h1 className="text-lg font-bold text-white drop-shadow-sm">سلام، {user?.name?.split(" ")[0] ?? ""} 👋</h1>
+          <p className="mt-1 text-sm text-white/75">به سامانه ارزیابی ۳۶۰ درجه خوش آمدید</p>
         </div>
         <div className="relative">
           <BellIcon />
@@ -86,7 +86,7 @@ export default function Home() {
 
 function BellIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#334155" strokeWidth="2">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
       <path d="M6 8a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M10 20a2 2 0 004 0" strokeLinecap="round" />
     </svg>

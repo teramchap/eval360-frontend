@@ -70,14 +70,14 @@ export default function EvaluationForm() {
 
   return (
     <div className="app-shell">
-      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-slate-500">
+      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-white/70 hover:text-white">
         › بازگشت
       </button>
       <div className="mb-5">
-        <h1 className="text-lg font-bold text-slate-800">
+        <h1 className="text-lg font-bold text-white drop-shadow-sm">
           {data.isSelf ? "خودارزیابی" : `ارزیابی ${data.evaluated.name}`}
         </h1>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-white/70">
           {data.evaluated.roleLabel}
           {!data.isSelf && ` · ${data.relationLabel}`}
         </p>

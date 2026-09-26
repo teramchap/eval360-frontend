@@ -25,13 +25,13 @@ export default function Fun() {
 
   return (
     <div className="app-shell">
-      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-slate-500">
+      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-white/70 hover:text-white">
         › بازگشت
       </button>
       <div className="mb-1 flex items-center gap-2">
-        <h1 className="text-lg font-bold text-slate-800">حالا یکم جدی نباشیم! 😄</h1>
+        <h1 className="text-lg font-bold text-white drop-shadow-sm">حالا یکم جدی نباشیم! 😄</h1>
       </div>
-      <p className="mb-5 text-xs text-slate-400">
+      <p className="mb-5 text-xs text-white/70">
         این بخش کاملاً اختیاری است و هیچ تأثیری در امتیاز عملکردی ندارد.
       </p>
 

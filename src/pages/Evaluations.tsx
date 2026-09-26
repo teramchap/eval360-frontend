@@ -21,8 +21,8 @@ export default function Evaluations() {
 
   return (
     <div className="app-shell">
-      <h1 className="mb-1 text-lg font-bold text-slate-800">ارزیابی‌های من</h1>
-      <p className="mb-5 text-sm text-slate-500">افرادی که باید ارزیابی کنید و وضعیت پیشرفت شما</p>
+      <h1 className="mb-1 text-lg font-bold text-white drop-shadow-sm">ارزیابی‌های من</h1>
+      <p className="mb-5 text-sm text-white/75">افرادی که باید ارزیابی کنید و وضعیت پیشرفت شما</p>
 
       <div className="mb-4 grid grid-cols-2 gap-3">
         <div className="card">

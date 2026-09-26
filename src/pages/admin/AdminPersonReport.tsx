@@ -16,11 +16,11 @@ export default function AdminPersonReport() {
 
   return (
     <div className="app-shell pb-10">
-      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-slate-500">
+      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-white/70 hover:text-white">
         › بازگشت
       </button>
-      <h1 className="mb-1 text-lg font-bold text-slate-800">گزارش فردی</h1>
-      <p className="mb-5 text-xs text-slate-400">نظرات و پاسخ‌ها کاملاً تجمیعی و بدون افشای هویت ارزیاب نمایش داده می‌شوند.</p>
+      <h1 className="mb-1 text-lg font-bold text-white drop-shadow-sm">گزارش فردی</h1>
+      <p className="mb-5 text-xs text-white/70">نظرات و پاسخ‌ها کاملاً تجمیعی و بدون افشای هویت ارزیاب نمایش داده می‌شوند.</p>
 
       <div className="card mb-4 text-center">
         <p className="mb-1 text-xs text-slate-500">امتیاز نهایی</p>

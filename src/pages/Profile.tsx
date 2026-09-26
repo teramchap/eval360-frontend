@@ -26,7 +26,7 @@ export default function Profile() {
 
   return (
     <div className="app-shell">
-      <h1 className="mb-5 text-lg font-bold text-slate-800">پروفایل من</h1>
+      <h1 className="mb-5 text-lg font-bold text-white drop-shadow-sm">پروفایل من</h1>
 
       <div className="card mb-4">
         <div className="mb-4 flex items-center gap-3">

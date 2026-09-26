@@ -25,14 +25,14 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-brand-50 to-white px-6">
+    <div className="flex min-h-screen items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-500 text-2xl font-bold text-white shadow-card">
             ۳۶۰
           </div>
-          <h1 className="text-xl font-bold text-slate-800">سامانه ارزیابی ۳۶۰ درجه</h1>
-          <p className="mt-1 text-sm text-slate-500">ارزش هر فرد، در نگاه دیگران معنا پیدا می‌کند</p>
+          <h1 className="text-xl font-bold text-white drop-shadow-sm">سامانه ارزیابی ۳۶۰ درجه</h1>
+          <p className="mt-1 text-sm text-white/75">ارزش هر فرد، در نگاه دیگران معنا پیدا می‌کند</p>
         </div>
 
         <form onSubmit={onSubmit} className="card space-y-4">

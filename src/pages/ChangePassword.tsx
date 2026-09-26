@@ -33,10 +33,10 @@ export default function ChangePassword() {
 
   return (
     <div className="app-shell">
-      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-slate-500">
+      <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-white/70 hover:text-white">
         › بازگشت
       </button>
-      <h1 className="mb-5 text-lg font-bold text-slate-800">تغییر رمز عبور</h1>
+      <h1 className="mb-5 text-lg font-bold text-white drop-shadow-sm">تغییر رمز عبور</h1>
 
       <form onSubmit={onSubmit} className="card space-y-4">
         <div>

@@ -27,10 +27,10 @@ export default function AdminCycleDetail() {
 
   return (
     <div className="app-shell pb-10">
-      <button onClick={() => navigate("/admin")} className="mb-4 self-start text-sm text-slate-500">
+      <button onClick={() => navigate("/admin")} className="mb-4 self-start text-sm text-white/70 hover:text-white">
         › بازگشت به دوره‌ها
       </button>
-      <h1 className="mb-5 text-lg font-bold text-slate-800">داشبورد دوره</h1>
+      <h1 className="mb-5 text-lg font-bold text-white drop-shadow-sm">داشبورد دوره</h1>
 
       <div className="mb-4 grid grid-cols-3 gap-2 text-center">
         <div className="card !p-3">

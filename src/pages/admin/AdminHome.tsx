@@ -57,11 +57,11 @@ export default function AdminHome() {
 
   return (
     <div className="app-shell pb-10">
-      <button onClick={() => navigate("/profile")} className="mb-4 self-start text-sm text-slate-500">
+      <button onClick={() => navigate("/profile")} className="mb-4 self-start text-sm text-white/70 hover:text-white">
         › بازگشت به پروفایل
       </button>
-      <h1 className="mb-1 text-lg font-bold text-slate-800">پنل مدیریتی</h1>
-      <p className="mb-5 text-sm text-slate-500">ساخت و مدیریت دوره‌های ارزیابی</p>
+      <h1 className="mb-1 text-lg font-bold text-white drop-shadow-sm">پنل مدیریتی</h1>
+      <p className="mb-5 text-sm text-white/75">ساخت و مدیریت دوره‌های ارزیابی</p>
 
       <Link to="/admin/users" className="card mb-6 flex items-center justify-between bg-plum-50">
         <div>
