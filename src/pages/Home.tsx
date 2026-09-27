@@ -19,13 +19,12 @@ export default function Home() {
 
   return (
     <div className="app-shell">
-      <div className="mb-6 -mx-4 -mt-6 flex justify-center bg-black/10 pb-4 pt-6">
-        <img src="/logo.png" alt="سامانه ارزیابی ۳۶۰ درجه" className="h-28 w-28 drop-shadow-lg" />
-      </div>
-
-      <header className="mb-6">
-        <h1 className="text-lg font-bold text-white drop-shadow-sm">سلام، {user?.name?.split(" ")[0] ?? ""} 👋</h1>
-        <p className="mt-1 text-sm text-white/75">به سامانه ارزیابی ۳۶۰ درجه خوش آمدید</p>
+      <header className="mb-6 flex items-center justify-between gap-3">
+        <div>
+          <h1 className="text-lg font-bold text-white drop-shadow-sm">سلام، {user?.name?.split(" ")[0] ?? ""} 👋</h1>
+          <p className="mt-1 text-sm text-white/75">به سامانه ارزیابی ۳۶۰ درجه خوش آمدید</p>
+        </div>
+        <img src="/logo.png" alt="" className="h-14 w-14 shrink-0 drop-shadow-lg" />
       </header>
 
       {!data?.cycle ? (
