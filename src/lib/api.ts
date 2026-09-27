@@ -109,4 +109,9 @@ export const api = {
   },
   adminTeamReport: (cycleId: string) => rpc<any>("admin_get_team_report", { p_cycle_id: cycleId }),
   adminFunReport: (cycleId: string) => rpc<any>("admin_get_fun_report", { p_cycle_id: cycleId }),
+  adminPeerAxisRanks: (cycleId: string, userId: string) =>
+    rpc<any[]>("admin_get_peer_axis_ranks", { p_cycle_id: cycleId, p_user_id: userId }),
+  myAxisRanks: () => rpc<any>("get_my_axis_ranks"),
+  adminIdentifiedFeedback: (cycleId: string, evaluatedId: string) =>
+    rpc<any[]>("admin_get_identified_feedback", { p_cycle_id: cycleId, p_evaluated_id: evaluatedId }),
 };

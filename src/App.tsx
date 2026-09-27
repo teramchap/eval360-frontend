@@ -13,6 +13,7 @@ import AdminCycleDetail from "./pages/admin/AdminCycleDetail";
 import AdminPersonReport from "./pages/admin/AdminPersonReport";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminOrgChart from "./pages/admin/AdminOrgChart";
+import MyResults from "./pages/MyResults";
 
 function Protected({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -40,6 +41,7 @@ export default function App() {
       <Route path="/profile/edit" element={<Protected><EditProfile /></Protected>} />
       <Route path="/profile/password" element={<Protected><ChangePassword /></Protected>} />
       <Route path="/fun" element={<Protected><Fun /></Protected>} />
+      <Route path="/my-results" element={<Protected><MyResults /></Protected>} />
       <Route path="/admin" element={<ManagerOnly><AdminHome /></ManagerOnly>} />
       <Route path="/admin/users" element={<ManagerOnly><AdminUsers /></ManagerOnly>} />
       <Route path="/admin/org-chart" element={<ManagerOnly><AdminOrgChart /></ManagerOnly>} />

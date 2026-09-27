@@ -6,10 +6,22 @@ export default function AdminPersonReport() {
   const { id, userId } = useParams<{ id: string; userId: string }>();
   const navigate = useNavigate();
   const [report, setReport] = useState<any>(null);
+  const [ranks, setRanks] = useState<Record<string, { rank: number; total: number }>>({});
+  const [identified, setIdentified] = useState<any[] | null>(null);
+  const [identifiedBlockedReason, setIdentifiedBlockedReason] = useState("");
 
   useEffect(() => {
     if (!id || !userId) return;
     api.adminReport(id, userId).then(setReport);
+    api.adminPeerAxisRanks(id, userId).then((rows) => {
+      const map: Record<string, { rank: number; total: number }> = {};
+      rows.forEach((r) => (map[r.axis] = { rank: r.rank, total: r.total }));
+      setRanks(map);
+    });
+    api
+      .adminIdentifiedFeedback(id, userId)
+      .then(setIdentified)
+      .catch((err) => setIdentifiedBlockedReason(err.message));
   }, [id, userId]);
 
   if (!report) return <div className="app-shell" />;
@@ -52,15 +64,23 @@ export default function AdminPersonReport() {
       </div>
 
       <div className="card mb-4">
-        <p className="mb-3 text-sm font-bold text-slate-700">امتیاز محورها</p>
-        <div className="space-y-2">
+        <p className="mb-1 text-sm font-bold text-slate-700">امتیاز محورها</p>
+        <p className="mb-3 text-[11px] text-slate-400">رتبه، مقایسه‌ی نسبی (بدون وزن‌دهی) با هم‌ردیفان همین نقش در این دوره است</p>
+        <div className="space-y-3">
           {report.axisScores.map((a: any) => (
             <div key={a.axis}>
-              <div className="mb-1 flex justify-between text-xs">
+              <div className="mb-1 flex items-center justify-between text-xs">
                 <span className="text-slate-600">
                   {a.axis} {a.lowResponse && <span className="text-amber-400">(پاسخ کم)</span>}
                 </span>
-                <span className="font-medium text-slate-800">{a.score != null ? a.score.toFixed(2) : "—"}</span>
+                <span className="flex items-center gap-2">
+                  {ranks[a.axis] && (
+                    <span className="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] text-brand-600">
+                      رتبه {ranks[a.axis].rank} از {ranks[a.axis].total}
+                    </span>
+                  )}
+                  <span className="font-medium text-slate-800">{a.score != null ? a.score.toFixed(2) : "—"}</span>
+                </span>
               </div>
               <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
                 <div className="h-full rounded-full bg-brand-500" style={{ width: `${((a.score ?? 0) / 5) * 100}%` }} />
@@ -68,6 +88,33 @@ export default function AdminPersonReport() {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="card mb-4">
+        <p className="mb-1 text-sm font-bold text-slate-700">نظرات شناسه‌دار (فقط مدیر)</p>
+        {identifiedBlockedReason ? (
+          <p className="text-xs text-amber-500">{identifiedBlockedReason}</p>
+        ) : identified && identified.length > 0 ? (
+          <div className="space-y-2">
+            <p className="mb-1 text-[11px] text-slate-400">
+              این بخش فقط برای شما (مدیر) قابل مشاهده است و هویت ارزیاب را نشان می‌دهد.
+            </p>
+            {identified.map((f: any, i: number) => (
+              <div key={i} className="rounded-lg bg-slate-50 p-2.5">
+                <div className="mb-1 flex items-center justify-between">
+                  <span className="text-xs font-medium text-slate-700">{f.evaluatorName}</span>
+                  <span className="text-xs font-bold text-brand-600">
+                    {f.averageScore != null ? f.averageScore.toFixed(2) : "—"} / ۵
+                  </span>
+                </div>
+                {f.strengthComment && <p className="text-[11px] text-mint-600">+ {f.strengthComment}</p>}
+                {f.improvementComment && <p className="text-[11px] text-amber-600">− {f.improvementComment}</p>}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-slate-400">هنوز ارزیابی تکمیل‌شده‌ای برای این فرد ثبت نشده است.</p>
+        )}
       </div>
 
       <div className="card mb-4">
