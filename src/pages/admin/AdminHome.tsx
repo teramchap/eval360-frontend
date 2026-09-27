@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../lib/api";
+import JalaliDateField from "../../components/JalaliDateField";
+import { isoToJalaliDisplay, jalaliPartsToIso, today } from "../../lib/jalali";
 
 const STATUS_LABEL: Record<string, string> = { DRAFT: "پیش‌نویس", ACTIVE: "فعال", CLOSED: "بسته‌شده" };
 const STATUS_STYLE: Record<string, string> = {
@@ -13,8 +15,9 @@ export default function AdminHome() {
   const navigate = useNavigate();
   const [cycles, setCycles] = useState<any[] | null>(null);
   const [title, setTitle] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const t = today();
+  const [startDate, setStartDate] = useState(t);
+  const [endDate, setEndDate] = useState(t);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -26,12 +29,16 @@ export default function AdminHome() {
   async function onCreate(e: FormEvent) {
     e.preventDefault();
     setError("");
+    const startIso = jalaliPartsToIso(startDate.jy, startDate.jm, startDate.jd);
+    const endIso = jalaliPartsToIso(endDate.jy, endDate.jm, endDate.jd);
+    if (endIso <= startIso) {
+      setError("تاریخ پایان باید بعد از تاریخ شروع باشد.");
+      return;
+    }
     setBusy(true);
     try {
-      await api.adminCreateCycle(title, startDate, endDate);
+      await api.adminCreateCycle(title, startIso, endIso);
       setTitle("");
-      setStartDate("");
-      setEndDate("");
       load();
     } catch (err: any) {
       setError(err.message);
@@ -39,6 +46,7 @@ export default function AdminHome() {
       setBusy(false);
     }
   }
+
 
   async function onActivate(id: string) {
     setError("");
@@ -80,21 +88,9 @@ export default function AdminHome() {
           onChange={(e) => setTitle(e.target.value)}
           required
         />
-        <div className="flex gap-2">
-          <input
-            type="date"
-            className="w-1/2 rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-brand-400"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            required
-          />
-          <input
-            type="date"
-            className="w-1/2 rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-brand-400"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-          />
+        <div className="grid grid-cols-2 gap-3">
+          <JalaliDateField label="تاریخ شروع دوره" value={startDate} onChange={setStartDate} />
+          <JalaliDateField label="تاریخ پایان دوره" value={endDate} onChange={setEndDate} />
         </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
         <button className="btn-primary w-full" disabled={busy}>
@@ -113,7 +109,7 @@ export default function AdminHome() {
               </span>
             </div>
             <p className="mb-3 text-xs text-slate-400">
-              {new Date(c.startDate).toLocaleDateString("fa-IR")} تا {new Date(c.endDate).toLocaleDateString("fa-IR")}
+              از {isoToJalaliDisplay(c.startDate)} تا {isoToJalaliDisplay(c.endDate)}
             </p>
             <div className="flex gap-2">
               {c.status === "DRAFT" && (
