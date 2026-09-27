@@ -6,6 +6,7 @@ export default function Fun() {
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [savingId, setSavingId] = useState<string | null>(null);
 
   useEffect(() => {
     api.fun().then((d) => {
@@ -20,7 +21,12 @@ export default function Fun() {
 
   async function choose(questionId: string, userId: string) {
     setAnswers((prev) => ({ ...prev, [questionId]: userId }));
-    await api.funAnswer(questionId, userId);
+    setSavingId(questionId);
+    try {
+      await api.funAnswer(questionId, userId);
+    } finally {
+      setSavingId(null);
+    }
   }
 
   return (
@@ -28,30 +34,30 @@ export default function Fun() {
       <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-white/70 hover:text-white">
         › بازگشت
       </button>
-      <div className="mb-1 flex items-center gap-2">
-        <h1 className="text-lg font-bold text-white drop-shadow-sm">حالا یکم جدی نباشیم! 😄</h1>
-      </div>
+      <h1 className="mb-1 text-lg font-bold text-white drop-shadow-sm">حالا یکم جدی نباشیم! 😄</h1>
       <p className="mb-5 text-xs text-white/70">
         این بخش کاملاً اختیاری است و هیچ تأثیری در امتیاز عملکردی ندارد.
       </p>
 
-      <div className="space-y-5">
+      <div className="space-y-4">
         {data.questions.map((q: any) => (
           <div key={q.id} className="card">
             <p className="mb-3 text-sm text-slate-700">{q.text}</p>
-            <div className="flex flex-wrap gap-2">
+            <select
+              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-brand-400"
+              value={answers[q.id] ?? ""}
+              onChange={(e) => choose(q.id, e.target.value)}
+              disabled={savingId === q.id}
+            >
+              <option value="" disabled>
+                انتخاب کنید...
+              </option>
               {data.candidates.map((c: any) => (
-                <button
-                  key={c.id}
-                  onClick={() => choose(q.id, c.id)}
-                  className={`rounded-full px-3 py-1.5 text-xs transition ${
-                    answers[q.id] === c.id ? "bg-amber-400 text-white" : "bg-slate-50 text-slate-600 hover:bg-slate-100"
-                  }`}
-                >
+                <option key={c.id} value={c.id}>
                   {c.name}
-                </button>
+                </option>
               ))}
-            </div>
+            </select>
           </div>
         ))}
       </div>

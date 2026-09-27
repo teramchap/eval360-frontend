@@ -28,9 +28,7 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-500 text-2xl font-bold text-white shadow-card">
-            ۳۶۰
-          </div>
+          <img src="/logo.png" alt="" className="mx-auto mb-4 h-20 w-20 drop-shadow-lg" />
           <h1 className="text-xl font-bold text-white drop-shadow-sm">سامانه ارزیابی ۳۶۰ درجه</h1>
           <p className="mt-1 text-sm text-white/75">ارزش هر فرد، در نگاه دیگران معنا پیدا می‌کند</p>
         </div>

@@ -52,7 +52,15 @@ export default function Evaluations() {
           const style = STATUS_STYLE[p.status];
           return (
             <div key={p.evaluationId} className="card flex items-center justify-between">
-              <div className="flex-1">
+              <div className="flex flex-1 items-center gap-3">
+                {p.avatarUrl ? (
+                  <img src={p.avatarUrl} alt="" className="h-11 w-11 rounded-full object-cover" />
+                ) : (
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-600">
+                    {p.name?.[0]}
+                  </div>
+                )}
+                <div className="flex-1">
                 <div className="mb-1 flex items-center gap-2">
                   <span className={`rounded-full px-2 py-0.5 text-[11px] ${style.bg} ${style.text}`}>
                     {style.dot} {p.statusLabel}
@@ -67,6 +75,7 @@ export default function Evaluations() {
                     className="h-full rounded-full bg-mint-500"
                     style={{ width: `${p.total ? (p.answered / p.total) * 100 : 0}%` }}
                   />
+                </div>
                 </div>
               </div>
               <Link

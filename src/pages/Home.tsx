@@ -7,31 +7,25 @@ import BottomNav from "../components/BottomNav";
 export default function Home() {
   const { user } = useAuth();
   const [data, setData] = useState<any>(null);
-  const [notifCount, setNotifCount] = useState(0);
 
   useEffect(() => {
     api.myEvaluations().then(setData);
-    api.notifications().then((r) => setNotifCount(r.notifications.length));
   }, []);
 
   const summary = data?.summary;
-  const selfDone = data?.selfEvaluation?.status === "COMPLETED";
+  const selfEval = data?.selfEvaluation;
+  const selfDone = selfEval?.status === "COMPLETED";
+  const selfLink = selfEval ? `/evaluations/${selfEval.evaluationId}` : "/evaluations";
 
   return (
     <div className="app-shell">
-      <header className="mb-6 flex items-start justify-between">
-        <div>
-          <h1 className="text-lg font-bold text-white drop-shadow-sm">سلام، {user?.name?.split(" ")[0] ?? ""} 👋</h1>
-          <p className="mt-1 text-sm text-white/75">به سامانه ارزیابی ۳۶۰ درجه خوش آمدید</p>
-        </div>
-        <div className="relative">
-          <BellIcon />
-          {notifCount > 0 && (
-            <span className="absolute -left-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
-              {notifCount}
-            </span>
-          )}
-        </div>
+      <div className="mb-6 -mx-4 -mt-6 flex justify-center bg-black/10 pb-4 pt-6">
+        <img src="/logo.png" alt="سامانه ارزیابی ۳۶۰ درجه" className="h-28 w-28 drop-shadow-lg" />
+      </div>
+
+      <header className="mb-6">
+        <h1 className="text-lg font-bold text-white drop-shadow-sm">سلام، {user?.name?.split(" ")[0] ?? ""} 👋</h1>
+        <p className="mt-1 text-sm text-white/75">به سامانه ارزیابی ۳۶۰ درجه خوش آمدید</p>
       </header>
 
       {!data?.cycle ? (
@@ -60,7 +54,7 @@ export default function Home() {
                 شروع ارزیابی
               </span>
             </Link>
-            <Link to="/evaluations?self=1" className="rounded-xl2 bg-plum-50 p-4 shadow-card">
+            <Link to={selfLink} className="rounded-xl2 bg-plum-50 p-4 shadow-card">
               <p className="mb-6 text-sm font-semibold text-slate-800">خودارزیابی</p>
               <p className="mb-3 text-xs text-slate-500">{selfDone ? "تکمیل شده" : "تکمیل نشده"}</p>
               <span className="inline-block rounded-full bg-plum-500 px-4 py-1.5 text-xs font-medium text-white">
@@ -81,14 +75,5 @@ export default function Home() {
 
       <BottomNav />
     </div>
-  );
-}
-
-function BellIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-      <path d="M6 8a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M10 20a2 2 0 004 0" strokeLinecap="round" />
-    </svg>
   );
 }

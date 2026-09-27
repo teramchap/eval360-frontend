@@ -83,6 +83,20 @@ export default function EvaluationForm() {
         </p>
       </div>
 
+      <div className="card mb-5 !bg-brand-50">
+        <p className="mb-2 text-xs font-semibold text-brand-700">راهنمای نمره‌دهی</p>
+        <div className="flex items-center justify-between text-[11px] text-slate-600">
+          {SCORE_LABELS.map((label, i) => (
+            <div key={label} className="flex flex-1 flex-col items-center gap-1">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-[11px] font-bold text-white">
+                {i + 1}
+              </span>
+              <span className="text-center leading-tight">{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="mb-5 space-y-6">
         {Object.entries(grouped).map(([axis, qs]: [string, any]) => (
           <div key={axis}>

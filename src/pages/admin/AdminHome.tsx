@@ -71,12 +71,20 @@ export default function AdminHome() {
       <h1 className="mb-1 text-lg font-bold text-white drop-shadow-sm">پنل مدیریتی</h1>
       <p className="mb-5 text-sm text-white/75">ساخت و مدیریت دوره‌های ارزیابی</p>
 
-      <Link to="/admin/users" className="card mb-6 flex items-center justify-between bg-plum-50">
+      <Link to="/admin/users" className="card mb-4 flex items-center justify-between bg-plum-50">
         <div>
           <p className="text-sm font-semibold text-plum-700">مدیریت کارمندان و چارت</p>
           <p className="text-xs text-slate-500">افزودن کارمند جدید، ویرایش نقش/سرپرست، بازنشانی رمز</p>
         </div>
         <span className="text-plum-400">‹</span>
+      </Link>
+
+      <Link to="/admin/org-chart" className="card mb-6 flex items-center justify-between bg-brand-50">
+        <div>
+          <p className="text-sm font-semibold text-brand-700">نمایش چارت سازمانی</p>
+          <p className="text-xs text-slate-500">ساختار فعلی گزارش‌دهی را به‌صورت درختی ببینید</p>
+        </div>
+        <span className="text-brand-400">‹</span>
       </Link>
 
       <form onSubmit={onCreate} className="card mb-6 space-y-3">

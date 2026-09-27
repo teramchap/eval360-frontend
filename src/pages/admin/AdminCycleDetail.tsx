@@ -73,11 +73,20 @@ export default function AdminCycleDetail() {
               to={`/admin/cycles/${id}/report/${p.userId}`}
               className="card flex items-center justify-between !p-3"
             >
-              <div>
-                <p className="text-sm font-medium text-slate-800">{p.name}</p>
-                <p className="text-xs text-slate-400">
-                  {p.roleLabel} · {p.evaluationsCompleted}/{p.evaluationsReceived} دریافت‌شده
-                </p>
+              <div className="flex items-center gap-3">
+                {p.avatarUrl ? (
+                  <img src={p.avatarUrl} alt="" className="h-10 w-10 rounded-full object-cover" />
+                ) : (
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-600">
+                    {p.name?.[0]}
+                  </div>
+                )}
+                <div>
+                  <p className="text-sm font-medium text-slate-800">{p.name}</p>
+                  <p className="text-xs text-slate-400">
+                    {p.roleLabel} · {p.evaluationsCompleted}/{p.evaluationsReceived} دریافت‌شده
+                  </p>
+                </div>
               </div>
               <span className="text-xs text-slate-400">مشارکت خودش: {p.participation}%</span>
             </Link>
