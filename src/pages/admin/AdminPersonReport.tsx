@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../lib/api";
+import { RELATION_LABEL } from "../../lib/labels";
 
 export default function AdminPersonReport() {
   const { id, userId } = useParams<{ id: string; userId: string }>();
@@ -9,6 +10,7 @@ export default function AdminPersonReport() {
   const [ranks, setRanks] = useState<Record<string, { rank: number; total: number }>>({});
   const [identified, setIdentified] = useState<any[] | null>(null);
   const [identifiedBlockedReason, setIdentifiedBlockedReason] = useState("");
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id || !userId) return;
@@ -31,8 +33,13 @@ export default function AdminPersonReport() {
       <button onClick={() => navigate(-1)} className="mb-4 self-start text-sm text-white/70 hover:text-white">
         › بازگشت
       </button>
-      <h1 className="mb-1 text-lg font-bold text-white drop-shadow-sm">گزارش فردی</h1>
-      <p className="mb-5 text-xs text-white/70">نظرات و پاسخ‌ها کاملاً تجمیعی و بدون افشای هویت ارزیاب نمایش داده می‌شوند.</p>
+      <h1 className="mb-1 text-lg font-bold text-white drop-shadow-sm">
+        گزارش دریافتی {report.evaluatedName ? `«${report.evaluatedName}»` : "فردی"}
+      </h1>
+      <p className="mb-5 text-xs text-white/70">
+        این صفحه یعنی: «دیگران چه نظری درباره‌ی {report.evaluatedName ?? "این فرد"} دارند» — نه ارزیابی‌هایی که خودش درباره‌ی بقیه داده.
+        بخش امتیاز و محورها تجمیعی و ناشناس است؛ فقط بخش «نظرات شناسه‌دار» پایین صفحه هویت ارزیاب را نشان می‌دهد.
+      </p>
 
       <div className="card mb-4 text-center">
         <p className="mb-1 text-xs text-slate-500">امتیاز نهایی</p>
@@ -91,24 +98,47 @@ export default function AdminPersonReport() {
       </div>
 
       <div className="card mb-4">
-        <p className="mb-1 text-sm font-bold text-slate-700">نظرات شناسه‌دار (فقط مدیر)</p>
+        <p className="mb-1 text-sm font-bold text-slate-700">پاسخ‌های شناسه‌دار (فقط مدیر)</p>
         {identifiedBlockedReason ? (
           <p className="text-xs text-amber-500">{identifiedBlockedReason}</p>
         ) : identified && identified.length > 0 ? (
           <div className="space-y-2">
             <p className="mb-1 text-[11px] text-slate-400">
-              این بخش فقط برای شما (مدیر) قابل مشاهده است و هویت ارزیاب را نشان می‌دهد.
+              روی اسم هر ارزیاب بزن تا جواب تک‌تک سؤال‌هایی که درباره‌ی {report.evaluatedName ?? "این فرد"} داده را ببینی.
             </p>
-            {identified.map((f: any, i: number) => (
-              <div key={i} className="rounded-lg bg-slate-50 p-2.5">
-                <div className="mb-1 flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-700">{f.evaluatorName}</span>
-                  <span className="text-xs font-bold text-brand-600">
-                    {f.averageScore != null ? f.averageScore.toFixed(2) : "—"} / ۵
+            {identified.map((f: any) => (
+              <div key={f.evaluationId} className="rounded-lg bg-slate-50">
+                <button
+                  onClick={() => setExpanded(expanded === f.evaluationId ? null : f.evaluationId)}
+                  className="flex w-full items-center justify-between p-2.5 text-right"
+                >
+                  <span className="text-xs font-medium text-slate-700">
+                    {f.evaluatorName} <span className="text-slate-400">({RELATION_LABEL[f.relationType]})</span>
                   </span>
-                </div>
-                {f.strengthComment && <p className="text-[11px] text-mint-600">+ {f.strengthComment}</p>}
-                {f.improvementComment && <p className="text-[11px] text-amber-600">− {f.improvementComment}</p>}
+                  <span className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-brand-600">
+                      {f.averageScore != null ? f.averageScore.toFixed(2) : "—"} / ۵
+                    </span>
+                    <span className="text-slate-400">{expanded === f.evaluationId ? "▲" : "▼"}</span>
+                  </span>
+                </button>
+
+                {expanded === f.evaluationId && (
+                  <div className="space-y-2 border-t border-slate-200 p-2.5">
+                    {f.strengthComment && <p className="text-[11px] text-mint-600">+ {f.strengthComment}</p>}
+                    {f.improvementComment && <p className="text-[11px] text-amber-600">− {f.improvementComment}</p>}
+                    <div className="space-y-1.5 pt-1">
+                      {f.answers.map((a: any, idx: number) => (
+                        <div key={idx} className="flex items-center justify-between gap-2 text-[11px]">
+                          <span className="text-slate-600">{a.question}</span>
+                          <span className="shrink-0 rounded-full bg-white px-2 py-0.5 font-medium text-slate-700">
+                            {a.insufficientInformation ? "بی‌اطلاع" : a.score}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

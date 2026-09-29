@@ -67,6 +67,9 @@ export default function AdminCycleDetail() {
 
       {tab === "people" && (
         <div className="space-y-2">
+          <p className="mb-1 text-[11px] text-white/70">
+            روی هر نفر بزن تا ببینی دیگران درباره‌ی او چه نظری داده‌اند (نه ارزیابی‌های خودش درباره‌ی بقیه).
+          </p>
           {dashboard.people.map((p: any) => (
             <Link
               key={p.userId}
