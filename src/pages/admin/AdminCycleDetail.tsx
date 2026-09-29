@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../lib/api";
+import { ROLE_LABEL } from "../../lib/labels";
 
-type Tab = "people" | "team" | "fun";
+type Tab = "people" | "ranking" | "team" | "fun";
 
 export default function AdminCycleDetail() {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,7 @@ export default function AdminCycleDetail() {
   const [dashboard, setDashboard] = useState<any>(null);
   const [team, setTeam] = useState<any>(null);
   const [fun, setFun] = useState<any>(null);
+  const [ranking, setRanking] = useState<any[] | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -21,9 +23,16 @@ export default function AdminCycleDetail() {
     if (!id) return;
     if (tab === "team" && !team) api.adminTeamReport(id).then(setTeam);
     if (tab === "fun" && !fun) api.adminFunReport(id).then(setFun);
+    if (tab === "ranking" && !ranking) api.adminRanking(id).then(setRanking);
   }, [tab, id]);
 
   if (!dashboard) return <div className="app-shell" />;
+
+  const rankingByRole: Record<string, any[]> = {};
+  (ranking ?? []).forEach((r) => {
+    if (!rankingByRole[r.role]) rankingByRole[r.role] = [];
+    rankingByRole[r.role].push(r);
+  });
 
   return (
     <div className="app-shell pb-10">
@@ -47,10 +56,11 @@ export default function AdminCycleDetail() {
         </div>
       </div>
 
-      <div className="mb-4 flex gap-2 text-xs">
+      <div className="mb-4 flex flex-wrap gap-2 text-xs">
         {(
           [
             ["people", "افراد"],
+            ["ranking", "رتبه‌بندی افراد"],
             ["team", "گزارش تجمیعی"],
             ["fun", "بخش غیررسمی"],
           ] as [Tab, string][]
@@ -94,6 +104,48 @@ export default function AdminCycleDetail() {
               <span className="text-xs text-slate-400">مشارکت خودش: {p.participation}%</span>
             </Link>
           ))}
+        </div>
+      )}
+
+      {tab === "ranking" && (
+        <div className="space-y-4">
+          <p className="text-[11px] text-white/70">
+            مقایسه‌ی امتیاز نهایی افراد، فقط بین هم‌ردیف‌ها (چون معیار سنجش هر نقش فرق دارد).
+          </p>
+          {!ranking ? (
+            <div className="card text-center text-sm text-slate-500">در حال بارگذاری...</div>
+          ) : (
+            Object.entries(rankingByRole).map(([role, people]) => (
+              <div key={role} className="card">
+                <p className="mb-2 text-sm font-bold text-brand-600">{ROLE_LABEL[role]}</p>
+                <div className="space-y-1.5">
+                  {people
+                    .slice()
+                    .sort((a, b) => (a.roleRank ?? 999) - (b.roleRank ?? 999))
+                    .map((p) => (
+                      <div key={p.userId} className="flex items-center justify-between gap-2 rounded-lg bg-slate-50 px-2.5 py-2">
+                        <div className="flex items-center gap-2">
+                          <span className="w-5 text-center text-xs font-bold text-slate-400">
+                            {p.roleRank ?? "—"}
+                          </span>
+                          {p.avatarUrl ? (
+                            <img src={p.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
+                          ) : (
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-600">
+                              {p.name?.[0]}
+                            </div>
+                          )}
+                          <span className="text-xs text-slate-700">{p.name}</span>
+                        </div>
+                        <span className="text-xs font-bold text-slate-800">
+                          {p.finalScore != null ? p.finalScore : "بدون امتیاز"}
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       )}
 

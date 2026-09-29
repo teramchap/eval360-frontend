@@ -114,4 +114,5 @@ export const api = {
   myAxisRanks: () => rpc<any>("get_my_axis_ranks"),
   adminIdentifiedFeedback: (cycleId: string, evaluatedId: string) =>
     rpc<any[]>("admin_get_identified_feedback", { p_cycle_id: cycleId, p_evaluated_id: evaluatedId }),
+  adminRanking: (cycleId: string) => rpc<any[]>("admin_get_ranking", { p_cycle_id: cycleId }),
 };
