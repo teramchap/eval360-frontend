@@ -112,6 +112,7 @@ export const api = {
   adminPeerAxisRanks: (cycleId: string, userId: string) =>
     rpc<any[]>("admin_get_peer_axis_ranks", { p_cycle_id: cycleId, p_user_id: userId }),
   myAxisRanks: () => rpc<any>("get_my_axis_ranks"),
+  myQuestionRanks: () => rpc<any>("get_my_question_ranks"),
   adminIdentifiedFeedback: (cycleId: string, evaluatedId: string) =>
     rpc<any[]>("admin_get_identified_feedback", { p_cycle_id: cycleId, p_evaluated_id: evaluatedId }),
   adminRanking: (cycleId: string) => rpc<any[]>("admin_get_ranking", { p_cycle_id: cycleId }),

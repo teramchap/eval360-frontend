@@ -69,6 +69,14 @@ export default function Home() {
             </div>
             <span className="rounded-full bg-amber-400 px-4 py-1.5 text-xs font-medium text-white">شروع</span>
           </Link>
+
+          <Link to="/my-results" className="card mt-3 flex items-center justify-between">
+            <div>
+              <p className="mb-1 text-sm font-semibold text-slate-800">📊 نتایج من</p>
+              <p className="text-xs text-slate-500">جایگاه شما در هر سؤال نسبت به هم‌ردیفانتان</p>
+            </div>
+            <span className="text-slate-300">‹</span>
+          </Link>
         </>
       )}
 

@@ -5,7 +5,6 @@ import { api } from "../lib/api";
 import BottomNav from "../components/BottomNav";
 
 const MENU = [
-  { label: "نتایج من", desc: "جایگاه شما در هر محور نسبت به هم‌ردیفانتان", to: "/my-results" },
   { label: "اطلاعات حساب کاربری", desc: "ویرایش اطلاعات فردی، شماره تماس و ایمیل", to: "/profile/edit" },
   { label: "تغییر رمز عبور", desc: "امنیت حساب خود را حفظ کنید", to: "/profile/password" },
   { label: "تنظیمات اعلان‌ها", desc: "مدیریت اطلاع‌رسانی‌ها", to: null },

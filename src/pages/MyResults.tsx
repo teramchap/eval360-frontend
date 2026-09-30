@@ -4,13 +4,26 @@ import { api } from "../lib/api";
 
 export default function MyResults() {
   const navigate = useNavigate();
-  const [data, setData] = useState<any>(null);
+  const [axisData, setAxisData] = useState<any>(null);
+  const [qData, setQData] = useState<any>(null);
 
   useEffect(() => {
-    api.myAxisRanks().then(setData);
+    api.myAxisRanks().then(setAxisData);
+    api.myQuestionRanks().then(setQData);
   }, []);
 
-  if (!data) return <div className="app-shell" />;
+  if (!axisData || !qData) return <div className="app-shell" />;
+
+  const axisRankByName: Record<string, { rank: number; total: number }> = {};
+  axisData.axes.forEach((a: any) => (axisRankByName[a.axis] = { rank: a.rank, total: a.total }));
+
+  const grouped: Record<string, any[]> = {};
+  qData.questions.forEach((q: any) => {
+    if (!grouped[q.axis]) grouped[q.axis] = [];
+    grouped[q.axis].push(q);
+  });
+
+  const cycleTitle = qData.cycleTitle ?? axisData.cycleTitle;
 
   return (
     <div className="app-shell">
@@ -19,29 +32,43 @@ export default function MyResults() {
       </button>
       <h1 className="mb-1 text-lg font-bold text-white drop-shadow-sm">نتایج من</h1>
       <p className="mb-5 text-xs text-white/70">
-        {data.cycleTitle
-          ? `جایگاه شما در هر محور، در مقایسه با هم‌ردیفانتان در دوره «${data.cycleTitle}»`
+        {cycleTitle
+          ? `جایگاه شما در هر سؤال، در مقایسه با هم‌ردیفانتان در دوره «${cycleTitle}»`
           : "هنوز نتیجه‌ای برای نمایش وجود ندارد."}
       </p>
 
-      {data.axes.length === 0 ? (
+      {Object.keys(grouped).length === 0 ? (
         <div className="card text-center text-sm text-slate-500">
           هنوز ارزیابی‌های کافی برای شما ثبت نهایی نشده است.
         </div>
       ) : (
-        <div className="space-y-3">
-          {data.axes.map((a: any) => (
-            <div key={a.axis} className="card">
-              <div className="mb-1 flex items-center justify-between text-sm">
-                <span className="font-medium text-slate-700">{a.axis}</span>
-                <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-600">
-                  رتبه {a.rank} از {a.total}
-                </span>
+        <div className="space-y-5">
+          {Object.entries(grouped).map(([axis, questions]) => (
+            <div key={axis}>
+              <div className="mb-2 flex items-center justify-between">
+                <h2 className="text-sm font-bold text-white drop-shadow-sm">{axis}</h2>
+                {axisRankByName[axis] && (
+                  <span className="rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-medium text-brand-600">
+                    رتبه محور: {axisRankByName[axis].rank} از {axisRankByName[axis].total}
+                  </span>
+                )}
               </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
-                <div className="h-full rounded-full bg-brand-500" style={{ width: `${(a.score / 5) * 100}%` }} />
+              <div className="space-y-2">
+                {questions.map((q: any, i: number) => (
+                  <div key={i} className="card !p-3">
+                    <p className="mb-2 text-xs text-slate-600">{q.question}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+                        <div className="h-full rounded-full bg-brand-500" style={{ width: `${(q.score / 5) * 100}%` }} />
+                      </div>
+                      <span className="mr-3 shrink-0 text-xs font-bold text-slate-800">{q.score}</span>
+                      <span className="mr-2 shrink-0 rounded-full bg-brand-50 px-2 py-0.5 text-[10px] text-brand-600">
+                        رتبه {q.rank}/{q.total}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <p className="mt-1 text-xs text-slate-400">میانگین امتیاز: {a.score}</p>
             </div>
           ))}
         </div>

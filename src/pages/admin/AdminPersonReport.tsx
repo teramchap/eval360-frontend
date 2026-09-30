@@ -98,6 +98,35 @@ export default function AdminPersonReport() {
       </div>
 
       <div className="card mb-4">
+        <p className="mb-1 text-sm font-bold text-slate-700">امتیاز تک‌تک سؤال‌ها (ناشناس)</p>
+        <p className="mb-3 text-[11px] text-slate-400">میانگین وزن‌دارِ همه‌ی ارزیاب‌ها روی هر سؤال، بدون افشای هویت</p>
+        <div className="space-y-4">
+          {Object.entries(
+            report.questionScores.reduce((acc: Record<string, any[]>, q: any) => {
+              (acc[q.axis] ??= []).push(q);
+              return acc;
+            }, {})
+          ).map(([axis, qs]: [string, any]) => (
+            <div key={axis}>
+              <p className="mb-2 text-xs font-bold text-brand-600">{axis}</p>
+              <div className="space-y-2">
+                {qs.map((q: any, i: number) => (
+                  <div key={i} className="flex items-center justify-between gap-2 text-[11px]">
+                    <span className="text-slate-600">
+                      {q.question} {q.lowResponse && <span className="text-amber-400">(پاسخ کم)</span>}
+                    </span>
+                    <span className="shrink-0 rounded-full bg-slate-50 px-2 py-0.5 font-medium text-slate-700">
+                      {q.score != null ? q.score.toFixed(2) : "—"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="card mb-4">
         <p className="mb-1 text-sm font-bold text-slate-700">پاسخ‌های شناسه‌دار (فقط مدیر)</p>
         {identifiedBlockedReason ? (
           <p className="text-xs text-amber-500">{identifiedBlockedReason}</p>
