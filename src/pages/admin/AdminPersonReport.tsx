@@ -42,10 +42,24 @@ export default function AdminPersonReport() {
       </p>
 
       <div className="card mb-4 text-center">
-        <p className="mb-1 text-xs text-slate-500">امتیاز نهایی</p>
-        <p className="text-3xl font-bold text-brand-600">
-          {report.finalScore != null ? report.finalScore.toFixed(2) : "—"}
-          <span className="text-sm text-slate-400"> / ۵</span>
+        <div className="mb-3 grid grid-cols-2 gap-3">
+          <div>
+            <p className="mb-1 text-xs text-slate-500">امتیاز موزون (بر اساس وزن رابطه‌ها)</p>
+            <p className="text-3xl font-bold text-brand-600">
+              {report.finalScore != null ? report.finalScore.toFixed(2) : "—"}
+              <span className="text-sm text-slate-400"> / ۵</span>
+            </p>
+          </div>
+          <div className="border-r border-slate-100">
+            <p className="mb-1 text-xs text-slate-500">میانگین خام (بدون وزن)</p>
+            <p className="text-3xl font-bold text-slate-500">
+              {report.simpleAverageScore != null ? report.simpleAverageScore.toFixed(2) : "—"}
+              <span className="text-sm text-slate-400"> / ۵</span>
+            </p>
+          </div>
+        </div>
+        <p className="text-[11px] text-slate-400">
+          امتیاز موزون یعنی نظر سرپرست/مدیر وزن بیشتری داره؛ میانگین خام یعنی همه‌ی نظرها به یک اندازه حساب شده‌اند.
         </p>
         {report.lowConfidenceOverall && (
           <p className="mt-2 rounded-full bg-amber-50 px-3 py-1 text-[11px] text-amber-500">

@@ -139,6 +139,9 @@ export default function AdminCycleDetail() {
                         </div>
                         <span className="text-xs font-bold text-slate-800">
                           {p.finalScore != null ? p.finalScore : "بدون امتیاز"}
+                          {p.simpleAverageScore != null && (
+                            <span className="mr-1 font-normal text-slate-400">(خام: {p.simpleAverageScore})</span>
+                          )}
                         </span>
                       </div>
                     ))}
