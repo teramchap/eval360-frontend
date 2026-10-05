@@ -16,6 +16,7 @@ export default function Home() {
   const selfEval = data?.selfEvaluation;
   const selfDone = selfEval?.status === "COMPLETED";
   const selfLink = selfEval ? `/evaluations/${selfEval.evaluationId}` : "/evaluations";
+  const closed = data?.cycle?.status === "CLOSED";
 
   return (
     <div className="app-shell">
@@ -31,6 +32,12 @@ export default function Home() {
         <div className="card text-center text-sm text-slate-500">در حال حاضر دوره ارزیابی فعالی وجود ندارد.</div>
       ) : (
         <>
+          {closed && (
+            <div className="card mb-4 !bg-slate-100 text-center">
+              <p className="text-sm font-medium text-slate-600">این دوره بسته شده — فقط می‌توانید نتایج ثبت‌شده را مشاهده کنید.</p>
+            </div>
+          )}
+
           <div className="mb-4 rounded-xl2 bg-gradient-to-l from-brand-600 to-brand-400 p-5 text-white shadow-card">
             <p className="mb-1 text-sm opacity-90">ارزیابی این دوره</p>
             <p className="mb-3 text-2xl font-bold">{summary?.percent ?? 0}% تکمیل شده</p>
@@ -40,7 +47,7 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <span className="text-sm opacity-90">{summary?.remaining ?? 0} ارزیابی باقی مانده</span>
               <Link to="/evaluations" className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-brand-600">
-                ادامه ارزیابی
+                {closed ? "مشاهده" : "ادامه ارزیابی"}
               </Link>
             </div>
           </div>
@@ -50,25 +57,27 @@ export default function Home() {
               <p className="mb-6 text-sm font-semibold text-slate-800">ارزیابی همکاران</p>
               <p className="mb-3 text-xs text-slate-500">{summary?.remaining ?? 0} نفر باقی مانده</p>
               <span className="inline-block rounded-full bg-mint-500 px-4 py-1.5 text-xs font-medium text-white">
-                شروع ارزیابی
+                {closed ? "مشاهده" : "شروع ارزیابی"}
               </span>
             </Link>
             <Link to={selfLink} className="rounded-xl2 bg-plum-50 p-4 shadow-card">
               <p className="mb-6 text-sm font-semibold text-slate-800">خودارزیابی</p>
               <p className="mb-3 text-xs text-slate-500">{selfDone ? "تکمیل شده" : "تکمیل نشده"}</p>
               <span className="inline-block rounded-full bg-plum-500 px-4 py-1.5 text-xs font-medium text-white">
-                شروع خودارزیابی
+                {closed ? "مشاهده" : "شروع خودارزیابی"}
               </span>
             </Link>
           </div>
 
-          <Link to="/fun" className="card flex items-center justify-between bg-amber-50">
-            <div>
-              <p className="mb-1 text-sm font-semibold text-slate-800">حالا یکم جدی نباشیم! 😄</p>
-              <p className="text-xs text-slate-500">چند سؤال کوتاه درباره همکارانتان</p>
-            </div>
-            <span className="rounded-full bg-amber-400 px-4 py-1.5 text-xs font-medium text-white">شروع</span>
-          </Link>
+          {!closed && (
+            <Link to="/fun" className="card flex items-center justify-between bg-amber-50">
+              <div>
+                <p className="mb-1 text-sm font-semibold text-slate-800">حالا یکم جدی نباشیم! 😄</p>
+                <p className="text-xs text-slate-500">چند سؤال کوتاه درباره همکارانتان</p>
+              </div>
+              <span className="rounded-full bg-amber-400 px-4 py-1.5 text-xs font-medium text-white">شروع</span>
+            </Link>
+          )}
 
           <Link to="/my-results" className="card mt-3 flex items-center justify-between">
             <div>

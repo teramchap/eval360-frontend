@@ -39,28 +39,32 @@ export default function Fun() {
         این بخش کاملاً اختیاری است و هیچ تأثیری در امتیاز عملکردی ندارد.
       </p>
 
-      <div className="space-y-4">
-        {data.questions.map((q: any) => (
-          <div key={q.id} className="card">
-            <p className="mb-3 text-sm text-slate-700">{q.text}</p>
-            <select
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-brand-400"
-              value={answers[q.id] ?? ""}
-              onChange={(e) => choose(q.id, e.target.value)}
-              disabled={savingId === q.id}
-            >
-              <option value="" disabled>
-                انتخاب کنید...
-              </option>
-              {data.candidates.map((c: any) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
+      {!data.cycleId ? (
+        <div className="card text-center text-sm text-slate-500">دوره فعالی برای این بخش وجود ندارد.</div>
+      ) : (
+        <div className="space-y-4">
+          {data.questions.map((q: any) => (
+            <div key={q.id} className="card">
+              <p className="mb-3 text-sm text-slate-700">{q.text}</p>
+              <select
+                className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-brand-400"
+                value={answers[q.id] ?? ""}
+                onChange={(e) => choose(q.id, e.target.value)}
+                disabled={savingId === q.id}
+              >
+                <option value="" disabled>
+                  انتخاب کنید...
                 </option>
-              ))}
-            </select>
-          </div>
-        ))}
-      </div>
+                {data.candidates.map((c: any) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
