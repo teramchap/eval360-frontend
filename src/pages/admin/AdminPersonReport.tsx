@@ -69,12 +69,19 @@ export default function AdminPersonReport() {
       </div>
 
       <div className="card mb-4">
-        <p className="mb-3 text-sm font-bold text-slate-700">تفکیک بر اساس نوع رابطه</p>
+        <p className="mb-1 text-sm font-bold text-slate-700">تفکیک بر اساس نوع رابطه</p>
+        <p className="mb-3 text-[11px] text-slate-400">جمع وزن‌ها همیشه ۱۰۰٪ است (شامل خودارزیابی)</p>
         <div className="space-y-2">
           {report.groups.map((g: any) => (
-            <div key={g.relationLabel} className="flex items-center justify-between text-xs">
+            <div
+              key={g.relationLabel}
+              className={`flex items-center justify-between text-xs ${g.relationType === "SELF" ? "rounded-lg bg-plum-50 p-2" : ""}`}
+            >
               <span className="text-slate-600">
                 {g.relationLabel} {g.lowResponse && <span className="text-amber-400">(پاسخ کم)</span>}
+                {g.relationType === "SELF" && g.average == null && (
+                  <span className="text-amber-400"> (ثبت نشده)</span>
+                )}
               </span>
               <span className="font-medium text-slate-800">
                 {g.average != null ? g.average.toFixed(2) : "—"} · وزن {g.weight}%
